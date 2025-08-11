@@ -1,0 +1,99 @@
+           **GREAT EXPECTATIONS AS DATA SOURCE**
+
+
+## **Setting Up Great Expectations as a Data Source**
+
+### **2.1 Overview**
+Great Expectations (GE) integrates with various data sources like **Pandas**, 
+**SQL databases**, and **cloud storage**. It validates data quality at each stage
+of our pipeline.
+
+---
+
+### **2.2 Steps to Configure Great Expectations**
+
+#### **Step 1: Install Great Expectations**
+```bash
+pip install great-expectations
+```
+
+---
+
+#### **Step 2: Initialize Great Expectations**
+1. Run the initialization command:
+   ```bash
+   great_expectations init
+   ```
+2. This creates the following directory structure:
+   ```
+   /great_expectations
+       ├── expectations/
+       ├── checkpoints/
+       ├── great_expectations.yml
+   ```
+
+---
+
+#### **Step 3: Add a Data Source**
+1. **Using a Pandas Data Source**:
+   - Edit the `great_expectations.yml` file to include your data source.
+   - Example:
+     ```yaml
+     datasources:
+       my_pandas_datasource:
+         class_name: PandasDatasource
+         module_name: great_expectations.datasource
+     ```
+
+2. **Programmatically Add a Data Source**:
+   ```python
+   from great_expectations.data_context import DataContext
+
+   context = DataContext()
+   context.test_yaml_config(yaml_config="""
+   class_name: PandasDatasource
+   module_name: great_expectations.datasource
+   """)
+   ```
+
+---
+
+#### **Step 4: Create an Expectation Suite**
+1. Generate a new suite:
+   ```bash
+   great_expectations suite new
+   ```
+2. Example Python code to create expectations:
+   ```python
+   from great_expectations.dataset import PandasDataset
+   import pandas as pd
+
+   df = pd.DataFrame({"value": [1, 2, 3, 4]})
+   dataset = PandasDataset(df)
+
+   # Add expectations
+   dataset.expect_column_values_to_be_between("value", 1, 4)
+   dataset.expect_column_to_exist("value")
+   ```
+
+---
+
+#### **Step 5: Validate Data**
+1. Create a checkpoint that validates a dataset against an expectation suite:
+   ```bash
+   great_expectations checkpoint new my_checkpoint
+   ```
+2. Run the checkpoint:
+   ```bash
+   great_expectations checkpoint run my_checkpoint
+   ```
+
+---
+
+### **2.3 Best Practices for Great Expectations**
+1. Use checkpoints to validate data at every pipeline stage.
+2. Automate validation using CI/CD pipelines (see Section 3).
+3. Document expectations using GE’s built-in documentation generator.
+
+---
+
