@@ -1,0 +1,132 @@
+                 SETTING-UP -SNYK
+
+
+## **Setting Up Snyk with a CI/CD Pipeline**
+
+### **2.1 Overview of Snyk**
+- **Purpose**: Snyk identifies and fixes vulnerabilities in dependencies, Docker images, 
+and infrastructure as code (IaC).
+- **Integration**: Works with GitHub Actions, Jenkins, GitLab CI/CD, CircleCI, and other CI/CD tools.
+
+---
+
+### ** Prerequisites**
+1. **Install Snyk CLI**:
+   ```bash
+   npm install -g snyk
+   ```
+2. **Authenticate Snyk**:
+   ```bash
+   snyk auth
+   ```
+   Follow the link provided and log in with your Snyk account.
+
+3. **Add Your Project to Snyk**:
+   ```bash
+   snyk monitor
+   ```
+
+---
+
+### ** Integrating Snyk with GitHub Actions**
+
+1. **Set Up a Workflow**:
+   - Create a `.github/workflows/snyk.yml` file:
+     ```yaml
+     name: Snyk Security Scan
+
+     on:
+       push:
+         branches:
+           - main
+       pull_request:
+         branches:
+           - main
+
+     jobs:
+       security:
+         runs-on: ubuntu-latest
+         steps:
+           - name: Checkout Code
+             uses: actions/checkout@v3
+
+           - name: Set Up Python
+             uses: actions/setup-python@v4
+             with:
+               python-version: 3.9
+
+           - name: Install Dependencies
+             run: pip install -r requirements.txt
+
+           - name: Run Snyk Test
+             env:
+               SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+             run: snyk test
+     ```
+
+2. **Store Snyk Token**:
+   - Go to **GitHub Repository Settings > Secrets > Actions** and add `SNYK_TOKEN` with your Snyk API token.
+
+3. **How It Works**:
+   - On every push or pull request, the workflow:
+     - Installs dependencies.
+     - Runs `snyk test`, which scans for vulnerabilities and outputs a detailed report.
+
+---
+
+### **2.4 Example: Integrating Snyk with Jenkins**
+
+1. **Install Snyk Plugin**:
+   - Go to **Manage Jenkins > Manage Plugins** and install the **Snyk Security** plugin.
+
+2. **Configure Snyk in Jenkins**:
+   - Go to **Manage Jenkins > Configure System**.
+   - Add your **Snyk API token** under the "Snyk" section.
+
+3. **Add Snyk to Your Jenkins Pipeline**:
+   ```groovy
+   pipeline {
+       agent any
+       stages {
+           stage('Security Scan') {
+               steps {
+                   snykSecurity test: '', failOnIssues: true
+               }
+           }
+       }
+   }
+   ```
+
+---
+
+### **2.5 Monitoring Vulnerabilities**
+- **Snyk Monitor**:
+  - Run this command to continuously monitor your project:
+    ```bash
+    snyk monitor
+    ```
+  - View the results in the Snyk dashboard.
+
+---
+
+### **2.6 Best Practices for Snyk**
+1. **Integrate at Every Stage**:
+   - Scan dependencies, Docker images, and IaC configurations during development and deployment.
+2. **Automate Fixes**:
+   - Use `snyk fix` to automatically resolve vulnerabilities:
+     ```bash
+     snyk fix
+     ```
+
+---
+
+## **Conclusion**
+
+1. **Common Security Vulnerabilities**:
+   - Vulnerabilities like insecure dependencies, model theft, and adversarial attacks can compromise ML apps. Prevent these with dependency scanning, input validation, and secure APIs.
+
+2. **Snyk in CI/CD**:
+   - Snyk simplifies security by automating vulnerability scanning in your CI/CD pipelines. Tools like **GitHub Actions** or **Jenkins** make integration seamless.
+
+By addressing vulnerabilities systematically and integrating tools like Snyk, you can ensure a **robust, secure, and maintainable ML app**. Let me know if you'd like further customization or assistance with your setup! 🚀
+By addressing vulnerabilities systematically and integrating tools like Snyk, you can ensure a **robust, secure, and maintainable ML app**. Let me know if you'd like further customization or assistance with your setup! 🚀
