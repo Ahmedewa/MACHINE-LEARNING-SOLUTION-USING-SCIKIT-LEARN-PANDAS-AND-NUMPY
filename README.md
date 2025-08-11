@@ -7182,7 +7182,7 @@ Performing regular audits ensures that your application, dependencies, and infra
 
 #### **Step 1: Conduct Penetration Testing**
 - Use tools like **OWASP ZAP** or **Burp Suite** to simulate real-world attacks and identify vulnerabilities.
-- **Example**:
+- **Code*:
   - Test your Flask app using OWASP ZAP:
     ```bash
     zap.sh -quickurl http://127.0.0.1:5000 -quickout report.html
