@@ -1,0 +1,42 @@
+                   MODEL POISONING[DATA POISIONING]
+
+
+
+
+### **Model Poisoning (Data Poisoning)**
+- **Description**: Attackers manipulate training data to alter the model's behavior, causing incorrect predictions.
+- **Examples**:
+  - Poisoning facial recognition systems to misidentify individuals.
+- **Prevention**:
+  - Validate data integrity using checksums or hashes.
+  - Use **differential privacy** to add noise to training data, reducing the impact of poisoned samples.
+
+
+
+## **1. Common Security Vulnerabilities in ML Apps and How to Prevent Them**
+
+### **1.1 Vulnerable Dependencies**
+- **Description**: ML apps often rely on open-source libraries (e.g., NumPy, TensorFlow, Flask), which may have vulnerabilities.
+- **Examples**:
+  - Outdated versions of **Flask** may allow cross-site scripting (XSS).
+  - Python **Pillow** library reported arbitrary code execution vulnerabilities in older versions.
+- **Prevention**:
+  - Use tools like **Snyk** or **Dependabot** to scan and update dependencies.
+  - Pin dependency versions in `requirements.txt` or `Pipfile`.
+    ```plaintext
+    Flask==2.0.3
+    TensorFlow==2.9.1
+    ```
+
+---
+
+### **1.2 Model Poisoning (Data Poisoning)**
+- **Description**: Attackers manipulate training data to alter the model's behavior, causing incorrect predictions.
+- **Examples**:
+  - Poisoning facial recognition systems to misidentify individuals.
+- **Prevention**:
+  - Validate data integrity using checksums or hashes.
+  - Use **differential privacy** to add noise to training data, reducing the impact of poisoned samples.
+
+---
+
