@@ -1,0 +1,62 @@
+                SYNK INTEGRATION [WITH SUPABASE & FIREBASE]
+
+
+## ** Integrating Snyk with Supabase and Firebase**
+
+### ** Snyk with Supabase**
+1. Install Snyk CLI:
+   ```bash
+   npm install -g snyk
+   ```
+
+2. Authenticate:
+   ```bash
+   snyk auth
+   ```
+
+3. Scan your Supabase project:
+   ```bash
+   snyk test
+   ```
+
+---
+
+### **Snyk with Firebase**
+1. Add Snyk to your Firebase project:
+   ```bash
+   cd <firebase_project>
+   snyk test
+   ```
+
+2. Monitor Firebase dependencies:
+   ```bash
+   snyk monitor
+   ```
+
+---
+
+## ** Firebase Firestore Emulator for Local Testing**
+
+### **4.1 Why Use Emulator?**
+- Test Firebase Firestore queries and security rules locally without affecting production.
+
+---
+
+### **4.2 Setting Up Firestore Emulator**
+1. Install Firebase CLI:
+   ```bash
+   npm install -g firebase-tools
+   ```
+
+2. Initialize Firebase:
+   ```bash
+   firebase init
+   ```
+
+3. Start the emulator:
+   ```bash
+   firebase emulators:start
+   ```
+
+---
+
