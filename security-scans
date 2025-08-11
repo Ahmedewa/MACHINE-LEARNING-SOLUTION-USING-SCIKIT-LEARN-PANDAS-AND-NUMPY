@@ -1,0 +1,51 @@
+         SECURITY AUDITS 
+
+## ** Security Audits Using OWASP ZAP, Burp Suite, and Automated Tools**
+
+### ** Why Use an Isolated Setting?**
+- To avoid impacting production systems during penetration tests.
+- To perform controlled testing on a replica of the production environment.
+
+---
+
+### **2.Setting Up OWASP ZAP**
+
+#### **Step 1: Install OWASP ZAP**
+1. Download OWASP ZAP from the [official website](https://www.zaproxy.org/).
+2. Launch ZAP in **GUI mode** or **headless mode** for automation.
+
+#### **Step 2: Use OWASP ZAP in Automation**
+1. Use the **Command Line Interface (CLI)** for scans:
+   ```bash
+   zap.sh -daemon -port 8080 -config api.key=12345
+   ```
+2. Automate scans with the ZAP API:
+   ```python
+   from zapv2 import ZAPv2
+
+   zap = ZAPv2(apikey='12345')
+   target = 'http://localhost:5000'
+
+   # Start a scan
+   zap.spider.scan(target)
+   while int(zap.spider.status()) < 100:
+       pass  # Wait for the scan to complete
+   print(zap.spider.results())
+   ```
+
+---
+
+### **2.3 Setting Up Burp Suite**
+1. Download Burp Suite (Community or Professional) from the [official website](https://portswigger.net/burp).
+2. Configure it to test your app in a staging environment.
+3. Use the **Burp Intruder** and **Repeater** tools to test endpoints for vulnerabilities.
+
+---
+
+### **2.4 Automating Security Audits**
+1. Schedule scans at regular intervals using tools like **OWASP ZAP CLI** or **Burp Suite Pro**.
+2. Run scans in isolated Docker containers:
+   ```bash
+   docker run -p 8080:8080 owasp/zap2docker-stable zap.sh -daemon
+   ```
+
