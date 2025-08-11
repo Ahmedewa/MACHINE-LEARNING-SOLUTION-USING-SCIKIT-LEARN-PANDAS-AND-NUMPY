@@ -1,0 +1,61 @@
+             SETTING-UP SNYK-WITH-GITHUB ACTIONS WORKFLOW
+
+
+## ** Setting Up Snyk with a CI/CD Pipeline**
+
+### ** Overview of Snyk**
+- **Purpose**: Snyk identifies and fixes vulnerabilities in dependencies, Docker images, and infrastructure as code (IaC).
+- **Integration**: Works with GitHub Actions, Jenkins, GitLab CI/CD, CircleCI, and other CI/CD tools.
+
+---
+
+### ** Prerequisites**
+1. **Install Snyk CLI**:
+  
+
+### ** Integrating Snyk with GitHub Actions**
+
+1. **Set Up a Workflow**:
+   - Create a `.github/workflows/snyk.yml` file:
+     ```yaml
+     name: Snyk Security Scan
+
+     on:
+       push:
+         branches:
+           - main
+       pull_request:
+         branches:
+           - main
+
+     jobs:
+       security:
+         runs-on: ubuntu-latest
+         steps:
+           - name: Checkout Code
+             uses: actions/checkout@v3
+
+           - name: Set Up Python
+             uses: actions/setup-python@v4
+             with:
+               python-version: 3.9
+
+           - name: Install Dependencies
+             run: pip install -r requirements.txt
+
+           - name: Run Snyk Test
+             env:
+               SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+             run: snyk test
+     ```
+
+2. **Store Snyk Token**:
+   - Go to **GitHub Repository Settings > Secrets > Actions** and add `SNYK_TOKEN` with your Snyk API token.
+
+3. **How It Works**:
+   - On every push or pull request, the workflow:
+     - Installs dependencies.
+     - Runs `snyk test`, which scans for vulnerabilities and outputs a detailed report.
+
+---
+
