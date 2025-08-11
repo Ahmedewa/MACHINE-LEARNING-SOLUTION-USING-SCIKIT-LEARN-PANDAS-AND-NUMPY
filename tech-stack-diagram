@@ -1,0 +1,57 @@
+
+         SINGLE-TECH-STACK-DIAGRAM
+
+## **2. Single Technical Diagram**
+
+Below is a **single technical diagram** to visualize the **architecture of your ML app’s development and deployment workflow**:
+
+```plaintext
+                                    +----------------------------------+
+                                    |      Version Control (Git)       |
+                                    +----------------------------------+
+                                                |
+                                                v
+    +------------------------------+   +------------------------------+
+    |      Development Setup       |   |       Data Management        |
+    |  - Virtual Environment       |   |  - Dataset Versioning (DVC)  |
+    |  - Jupyter Notebooks         |   |  - Cloud Storage (AWS S3)    |
+    +------------------------------+   +------------------------------+
+                   |                                     |
+                   v                                     v
+    +------------------------------------------------------------+
+    |                  Model Experimentation                     |
+    |  - MLflow for Experiment Tracking                          |
+    |  - Hyperparameter Tuning                                   |
+    +------------------------------------------------------------+
+                             |
+                             v
+    +------------------------------------------------------------+
+    |               CI/CD (GitHub Actions, Jenkins)              |
+    |  - Automated Testing                                        |
+    |  - Model Deployment (Docker, Kubernetes)                   |
+    +------------------------------------------------------------+
+                             |
+                             v
+    +------------------------------------------------------------+
+    |                   Monitoring and Logging                   |
+    |  - Prometheus + Grafana                                    |
+    |  - CloudWatch/Azure Monitor                                |
+    +------------------------------------------------------------+
+```
+
+---
+
+## **3. Resources**
+
+### **Tools & Libraries**
+1. **Environment Management**: [venv](https://docs.python.org/3/library/venv.html), [Docker](https://www.docker.com/).
+2. **Data Management**: [DVC](https://dvc.org/), [AWS S3](https://aws.amazon.com/s3/).
+3. **Experiment Tracking**: [MLflow](https://mlflow.org/), [Weights & Biases](https://wandb.ai/).
+4. **CI/CD**: [GitHub Actions](https://github.com/actions), [Jenkins](https://www.jenkins.io/).
+
+### **Learning Resources**
+1. **AWS for ML**: [AWS Machine Learning Services](https://aws.amazon.com/machine-learning/).
+2. **Kubernetes for ML**: [GKE for ML](https://cloud.google.com/kubernetes-engine).
+3. **Best Practices**: [Google ML Engineering Guide](https://developers.google.com/machine-learning/guides/rules-of-ml).
+
+---
