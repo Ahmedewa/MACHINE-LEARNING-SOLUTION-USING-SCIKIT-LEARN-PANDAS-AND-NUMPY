@@ -1,0 +1,33 @@
+              JSON PACKAGES-START- BUILD -TEST -APP
+
+
+## **JSON Packages  to Build, Start, and Test the App**
+
+### ** Using `package.json` for Node.js**
+
+1. **Structure Your `package.json`**:
+   ```json
+   {
+     "name": "ml-app",
+     "version": "1.0.0",
+     "scripts": {
+       "start": "node app.js",
+       "test": "jest",
+       "build": "webpack"
+     },
+     "dependencies": {
+       "firebase-admin": "^10.0.0",
+       "firebase-functions": "^4.0.0"
+     }
+   }
+   ```
+
+2. **Run Commands**:
+   ```bash
+   npm install
+   npm start
+   npm test
+   ```
+
+---
+
