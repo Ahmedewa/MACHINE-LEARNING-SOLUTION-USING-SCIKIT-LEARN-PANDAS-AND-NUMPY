@@ -1,0 +1,10 @@
+            ADVERSARIAL ATTACKS
+
+### ** Adversarial Attacks**
+- **Description**: Attackers craft inputs that trick the ML model into making incorrect predictions.
+- **Examples**:
+  - Adding imperceptible noise to an image causes a classifier to mislabel it.
+- **Prevention**:
+  - Apply **adversarial training** by exposing the model to adversarial examples during training.
+  - Use input sanitization techniques to detect and filter adversarial inputs.
+
