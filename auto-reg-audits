@@ -1,0 +1,263 @@
+                     AUTOMATION-REGULAR-SECURITY-AUDITS
+
+
+Automate **regular audits** and 
+**penetration tests** using **OWASP ZAP** and **Burp Suite**,
+---
+
+## **1. Overview of OWASP ZAP and Burp Suite**
+
+### **1.1 OWASP ZAP (Zed Attack Proxy)**
+- **Purpose**: Open-source web application security scanner.
+- **Key Features**:
+  - Scans for vulnerabilities like SQL Injection, Cross-Site Scripting (XSS), and insecure headers.
+  - Provides automated and manual scanning modes.
+- **Good for**: Automating security scans in CI/CD pipelines.
+
+### **1.2 Burp Suite**
+- **Purpose**: A commercial-grade web vulnerability scanner used by security professionals.
+- **Key Features**:
+  - Advanced manual penetration testing tools.
+  - Crawls webpages, detects vulnerabilities, and intercepts requests.
+  - Includes Burp Collaborator for out-of-band testing.
+- **Good for**: Advanced penetration testing and manual analysis.
+
+---
+
+## **2. Automating Regular Audits with OWASP ZAP**
+
+### **2.1 Setting Up OWASP ZAP**
+
+#### **Step 1: Install OWASP ZAP**
+1. Download **OWASP ZAP** from the [official website](https://www.zaproxy.org/download/).
+2. Run ZAP:
+   ```bash
+   zap.sh   # For Linux/Mac
+   zap.bat  # For Windows
+   ```
+
+#### **Step 2: Use the ZAP API**
+OWASP ZAP provides a REST API for automating scans.
+
+1. Start ZAP in **daemon mode** (headless mode for automation):
+   ```bash
+   zap.sh -daemon -port 8080 -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true
+   ```
+
+2. Access the API documentation:
+   Navigate to `http://localhost:8080/UI` → API tab.
+
+---
+
+### **2.2 Automating Scans Using Python**
+
+#### **Code Example: OWASP ZAP with Python**
+```python
+import time
+from zapv2 import ZAPv2
+
+# OWASP ZAP API Configuration
+ZAP_API_KEY = "your-zap-api-key"
+ZAP_ADDRESS = "http://localhost"
+ZAP_PORT = "8080"
+TARGET_URL = "http://your-ml-app-url.com"
+
+zap = ZAPv2(apikey=ZAP_API_KEY, proxies={"http": f"{ZAP_ADDRESS}:{ZAP_PORT}", "https": f"{ZAP_ADDRESS}:{ZAP_PORT}"})
+
+# Start Passive Scan
+print(f"Accessing target {TARGET_URL}")
+zap.urlopen(TARGET_URL)
+time.sleep(2)
+
+# Start Active Scan
+print("Starting active scan...")
+scan_id = zap.ascan.scan(TARGET_URL)
+while int(zap.ascan.status(scan_id)) < 100:
+    print(f"Scan progress: {zap.ascan.status(scan_id)}%")
+    time.sleep(5)
+
+# Retrieve Scan Results
+print("Scan completed. Retrieving alerts...")
+alerts = zap.core.alerts(baseurl=TARGET_URL)
+for alert in alerts:
+    print(f"Alert: {alert['alert']}")
+    print(f"Risk: {alert['risk']}")
+    print(f"Description: {alert['description']}")
+    print("---")
+```
+
+#### **Output**:
+The script identifies vulnerabilities like:
+- SQL Injection.
+- XSS.
+- Insecure HTTP headers.
+
+---
+
+### **2.3 Integrating OWASP ZAP into CI/CD Pipelines**
+
+1. **GitHub Actions Example**:
+   - Add a `.github/workflows/zap.yml` file:
+     ```yaml
+     name: OWASP ZAP Scan
+
+     on:
+       push:
+         branches:
+           - main
+
+     jobs:
+       zap_scan:
+         runs-on: ubuntu-latest
+         steps:
+           - name: Checkout Code
+             uses: actions/checkout@v3
+
+           - name: Start OWASP ZAP
+             run: docker run -u zap -p 8080:8080 owasp/zap2docker-stable zap.sh -daemon -host 0.0.0.0 -port 8080
+
+           - name: Run ZAP Scan
+             run: |
+               zap-cli --zap-url http://localhost:8080 --api-key your-zap-api-key quick-scan http://your-ml-app-url.com
+     ```
+
+2. **Jenkins Integration**:
+   - Use the **OWASP ZAP Jenkins Plugin** for scheduled scans.
+
+---
+
+## **3. Advanced Penetration Testing with Burp Suite**
+
+### **3.1 Setting Up Burp Suite**
+
+#### **Step 1: Install Burp Suite**
+- Download Burp Suite from the [official website](https://portswigger.net/burp).
+- Choose **Burp Suite Community Edition** (free) or **Professional Edition** (paid).
+
+#### **Step 2: Configure Proxy**
+1. Configure your browser to use **Burp Proxy**:
+   - Proxy → Intercept → Enable Interception.
+   - Forward intercepted requests.
+
+2. Install the Burp CA certificate in your browser for HTTPS testing:
+   - Visit `http://burp` → Install the certificate.
+
+---
+
+### **3.2 Automating Scans in Burp Suite**
+
+#### **Step 1: Use the Burp Suite REST API**
+- Burp Suite Professional includes a REST API for automation.
+- Start Burp with the API enabled:
+  ```bash
+  java -jar burpsuite_pro.jar --api
+  ```
+
+#### **Step 2: Python Script**
+```python
+import requests
+import time
+
+BURP_API_URL = "http://localhost:1337"
+
+# Define the target URL
+TARGET_URL = "http://your-ml-app-url.com"
+
+# Start a new scan
+scan_data = {
+    "urls": [TARGET_URL],
+    "scanConfiguration": {"scanMode": "fast"}
+}
+response = requests.post(f"{BURP_API_URL}/v0.1/scan", json=scan_data)
+scan_id = response.json()["scanId"]
+
+# Poll for scan status
+while True:
+    status = requests.get(f"{BURP_API_URL}/v0.1/scan/{scan_id}/status").json()
+    print(f"Scan progress: {status['percentageComplete']}%")
+    if status["status"] == "completed":
+        break
+    time.sleep(10)
+
+# Retrieve scan results
+results = requests.get(f"{BURP_API_URL}/v0.1/scan/{scan_id}/issues").json()
+for issue in results:
+    print(f"Issue: {issue['name']}")
+    print(f"Severity: {issue['severity']}")
+    print(f"Confidence: {issue['confidence']}")
+    print("---")
+```
+
+---
+
+### **3.3 Manual Testing with Burp Suite**
+1. Use **Intruder** to brute-force login forms.
+2. Use **Repeater** to test SQL Injection or XSS manually.
+   - Example Payload:
+     ```sql
+     ' OR '1'='1
+     ```
+
+3. Use **Scanner** for automated vulnerability detection.
+
+---
+
+### **3.4 Best Practices for Burp Suite Usage**
+- **Focus on High-Risk Areas**:
+  - APIs, authentication endpoints, and sensitive data handling routes.
+- **Rate Limit Testing**:
+  - Avoid overwhelming production servers.
+
+---
+
+## **4. Best Practices from Similar Apps**
+
+### **4.1 Regular Testing**
+- Automate scans weekly or before releases.
+- Use both tools (ZAP for automation, Burp for advanced manual testing).
+
+### **4.2 Documentation**
+- Document:
+  - Vulnerabilities found.
+  - Steps to reproduce.
+  - Fixes applied.
+
+### **4.3 Use Separate Environments**
+- Do not test on production systems.
+- Use staging environments with realistic data.
+
+### **4.4 Combine Tools**
+- Use Snyk or Dependabot for dependency scanning.
+- Use OWASP ZAP/Burp for runtime vulnerability tests.
+
+---
+
+## **5. Resources**
+
+### **OWASP ZAP**
+- Official Docs: [https://www.zaproxy.org/docs/](https://www.zaproxy.org/docs/)
+- GitHub Actions Example Repo: [https://github.com/zaproxy/action-baseline](https://github.com/zaproxy/action-baseline)
+
+### **Burp Suite**
+- Official Docs: [https://portswigger.net/burp/documentation](https://portswigger.net/burp/documentation)
+- Python API Client: [https://github.com/vmware/burp-rest-api](https://github.com/vmware/burp-rest-api)
+
+### **General Security Practices**
+- OWASP Top 10: [https://owasp.org/www-project-top-ten/](https://owasp.org/www-project-top-ten/)
+- Cheat Sheets: [https://cheatsheetseries.owasp.org/](https://cheatsheetseries.owasp.org/)
+
+---
+
+## **6. Conclusion**
+
+1. **OWASP ZAP**: Ideal for automating vulnerability scans in CI/CD pipelines.
+2. **Burp Suite**: Best for advanced manual testing and out-of-band attacks.
+3. **Best Practices**:
+   - Regularly schedule scans and audits.
+   - Document vulnerabilities and fixes.
+   - Test in isolated environments to prevent production downtime.
+
+By automating audits with **OWASP ZAP** and performing advanced penetration tests 
+with **Burp Suite**, you can ensure your ML app is secure and resilient against
+real-world attacks.
+
