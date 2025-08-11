@@ -1,0 +1,128 @@
+           kubeflow-deployment.py
+
+## **Automate Deployment**
+
+### **Why Automate Deployment?**
+Automating deployment ensures:
+- **Consistency**: The same workflows are applied across environments.
+- **Speed**: Models are deployed faster with fewer manual steps.
+- **Scalability**: Automated pipelines handle larger workloads efficiently.
+
+---
+
+### **Tools for Deployment Automation**
+1. **Kubeflow**: Orchestrates ML workflows on Kubernetes.
+2. **Apache Airflow**: Schedules and monitors workflows.
+
+---
+
+### ** Deploying with Kubeflow**
+
+#### **Step 1: Install Kubeflow**
+Follow the [Kubeflow installation guide](https://www.kubeflow.org/docs/started/getting-started/).
+
+---
+
+#### **Step 2: Create a Kubeflow Pipeline**
+
+**Pipeline **:
+```python
+import kfp
+from kfp import dsl
+
+@dsl.pipeline(
+    name="ML Training Pipeline",
+    description="A pipeline to train and deploy an ML model."
+)
+def ml_pipeline():
+    # Step 1: Data Preprocessing
+    preprocess_op = dsl.ContainerOp(
+        name="Preprocess Data",
+        image="python:3.9",
+        command=["python", "preprocess.py"],
+    )
+
+    # Step 2: Train Model
+    train_op = dsl.ContainerOp(
+        name="Train Model",
+        image="python:3.9",
+        command=["python", "train.py"],
+        arguments=["--input", preprocess_op.output],
+    )
+
+    # Step 3: Deploy Model
+    deploy_op = dsl.ContainerOp(
+        name="Deploy Model",
+        image="python:3.9",
+        command=["python", "deploy.py"],
+        arguments=["--model", train_op.output],
+    )
+
+if __name__ == "__main__":
+    kfp.Client().create_run_from_pipeline_func(ml_pipeline, arguments={})
+```
+
+---
+
+#### **Step 3: Compile and Submit Pipeline**
+1. Compile the pipeline:
+   ```bash
+   dsl-compile --py pipeline.py --output pipeline.tar.gz
+   ```
+
+2. Submit the pipeline:
+   ```bash
+   kfp run submit --pipeline pipeline.tar.gz
+   ```
+
+---
+
+### **2.4 Automating Deployment with GitHub Actions**
+
+**GitHub Actions Workflow Example**:
+```yaml
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout repository
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Set up Python environment
+      - name: Set Up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      # Install dependencies
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+
+      # Train and Deploy Model
+      - name: Train and Deploy
+        run: |
+          python train.py
+          python deploy.py
+```
+
+---
+
+### **2.5 Best Practices for Deployment Automation**
+1. **Orchestrate Pipelines**:
+   - Use tools like Kubeflow or Apache Airflow for pipeline orchestration.
+2. **Automate Testing**:
+   - Use CI/CD pipelines to test models before deployment.
+3. **Containerization**:
+   - Package your model and pipeline scripts into a Docker container for portability.
+
+---
+
