@@ -1,0 +1,10 @@
+                     LACK OF SECURE MODEL HOSTING
+
+### **1.8 Lack of Secure Model Hosting**
+- **Description**: Hosting models on insecure servers leaves them vulnerable to unauthorized access.
+- **Examples**:
+  - Exposing a model on an open port without any authentication.
+- **Prevention**:
+  - Use secure model-serving frameworks like **TF Serving** or **TorchServe** behind a reverse proxy (e.g., NGINX).
+  - Enable HTTPS by deploying SSL/TLS certificates.
+
