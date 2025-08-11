@@ -1,0 +1,20 @@
+             MODEL THEFT
+
+
+### **Model Theft**
+- **Description**: Attackers steal your model by accessing APIs and reconstructing the model through repeated queries.
+- **Examples**:
+  - Extracting a proprietary ML model by observing its predictions.
+- **Prevention**:
+  - Use **rate limiting** to restrict excessive API calls.
+  - Add **watermarking** to your model outputs to detect unauthorized usage.
+  - Encrypt the model file (`model.pkl`) using tools like **Fernet**.
+    ```python
+    from cryptography.fernet import Fernet
+    key = Fernet.generate_key()
+    cipher = Fernet(key)
+    encrypted_model = cipher.encrypt(model_file.read())
+    ```
+
+---
+
