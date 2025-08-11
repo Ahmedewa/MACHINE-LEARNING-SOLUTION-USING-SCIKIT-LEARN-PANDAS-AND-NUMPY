@@ -1,0 +1,16 @@
+              INSECURE APIs
+
+
+
+### **Insecure APIs**
+- **Description**: ML apps expose APIs for predictions or model serving that may be exploited.
+- **Examples**:
+  - Lack of authentication or rate limiting allows unauthorized users to abuse the API.
+- **Prevention**:
+  - Implement **authentication** and **authorization** (e.g., OAuth2, API keys).
+  - Use **rate limiting** to prevent abuse.
+    ```python
+    from flask_limiter import Limiter
+    limiter = Limiter(app, default_limits=["100 per minute"])
+    ```
+
