@@ -1,0 +1,73 @@
+        TESTS-AUTOMATION
+
+
+#### **How to Automate Tests**
+
+1. **Set Up CI/CD Pipeline**:
+   - Use GitHub Actions to automate testing:
+     ```yaml
+     name: Firebase Emulator Tests
+
+     on:
+       push:
+         branches:
+           - main
+
+     jobs:
+       test:
+         runs-on: ubuntu-latest
+         steps:
+           - name: Checkout Code
+             uses: actions/checkout@v3
+
+           - name: Install Firebase CLI
+             run: npm install -g firebase-tools
+
+           - name: Start Emulator
+             run: firebase emulators:start --only firestore,auth --project test --headless &
+
+           - name: Run Tests
+             run: npm test
+     ```
+
+2. **Write Tests for Security Rules**:
+   - Use the Firebase Rules Unit Testing library (as shown in **Section 1.1**).
+
+3. **Run Vulnerability Scans**:
+   - Use **Snyk** CLI in your pipeline:
+     ```yaml
+     - name: Run Snyk Vulnerability Scan
+       run: snyk test
+     ```
+
+---
+
+### **2.3 Monitor Continuously**
+
+#### **Why Monitor Continuously?**
+- Detect vulnerabilities or issues early.
+- Ensure the app remains secure and functional over time.
+
+---
+
+#### **How to Monitor Continuously**
+
+1. **OWASP ZAP Integration**:
+   - Automate scans in CI/CD pipelines:
+     ```yaml
+     - name: Run OWASP ZAP Scan
+       run: zap-cli quick-scan http://localhost:5000
+     ```
+
+2. **Snyk Integration**:
+   - Add Snyk to your pipeline for continuous monitoring:
+     ```yaml
+     - name: Monitor with Snyk
+       run: snyk monitor
+     ```
+
+3. **Firebase Emulator Monitoring**:
+   - Use the Firebase Emulator UI to monitor Firestore/Auth activity during tests.
+
+---
+
