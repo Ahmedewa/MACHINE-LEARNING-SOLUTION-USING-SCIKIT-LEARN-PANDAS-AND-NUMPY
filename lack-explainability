@@ -1,0 +1,19 @@
+            LACK OF EXPLINABILITY
+
+
+### **Lack of Explainability**
+- **Description**: Black-box models make it difficult to understand why a prediction was made, leading to trust and security issues.
+- **Examples**:
+  - A healthcare ML app denies treatment without justification.
+- **Prevention**:
+  - Use **Explainable AI (XAI)** frameworks like SHAP or LIME to provide insights into model decisions.
+  -  SHAP:
+    ```python
+    import shap
+    explainer = shap.Explainer(model.predict, X_train)
+    shap_values = explainer(X_test)
+    shap.summary_plot(shap_values, X_test)
+    ```
+
+
+
