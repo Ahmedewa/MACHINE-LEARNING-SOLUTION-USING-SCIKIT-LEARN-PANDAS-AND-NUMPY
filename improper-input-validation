@@ -1,0 +1,28 @@
+      IMPROPER INPUT VALIDATION
+
+### ** Improper Input Validation**
+- **Description**: Allowing unvalidated inputs can lead to injection attacks or system crashes.
+- **Examples**:
+  - A user sends corrupted JSON that crashes the API.
+- **Prevention**:
+  - Validate incoming requests using JSON schemas.
+    ```python
+    from jsonschema import validate, ValidationError
+
+    schema = {
+        "type": "object",
+        "properties": {
+            "feature1": {"type": "number"},
+            "feature2": {"type": "number"}
+        },
+        "required": ["feature1", "feature2"]
+    }
+
+    try:
+        validate(instance=request.json, schema=schema)
+    except ValidationError as e:
+        return {"error": str(e)}, 400
+    ```
+
+---
+
