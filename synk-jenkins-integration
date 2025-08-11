@@ -1,0 +1,28 @@
+           INTEGRATION-OF-SYNK-WITH-JENKINS
+
+
+### **Integrating Snyk with Jenkins**
+
+1. **Install Snyk Plugin**:
+   - Go to **Manage Jenkins > Manage Plugins** and install the **Snyk Security** plugin.
+
+2. **Configure Snyk in Jenkins**:
+   - Go to **Manage Jenkins > Configure System**.
+   - Add your **Snyk API token** under the "Snyk" section.
+
+3. **Add Snyk to Your Jenkins Pipeline**:
+   ```groovy
+   pipeline {
+       agent any
+       stages {
+           stage('Security Scan') {
+               steps {
+                   snykSecurity test: '', failOnIssues: true
+               }
+           }
+       }
+   }
+   ```
+
+---
+
