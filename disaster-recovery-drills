@@ -1,0 +1,161 @@
+             DIASTER RECOVERY DRILLS[DRD]
+
+
+
+## **2. Regular Disaster Recovery Drills**
+
+### **2.1 Schedule Periodic DR Drills**
+Regularly test your backup and restore procedures to validate your disaster recovery strategy.
+
+#### **Steps for DR Drills**
+1. **Simulate Data Loss**:
+   - Delete data from a staging environment to test recovery.
+   - Example:
+     ```bash
+     rm -rf ./data/training_data/*
+     ```
+
+2. **Restore Data from Backup**:
+   - AWS S3 Example:
+     ```python
+     def restore_training_data():
+         restore_key = "backups/20230801-120000/training_data.csv"
+         s3.download_file(bucket_name, restore_key, "./data/training_data/restored_data.csv")
+         print("Training data restored successfully.")
+     restore_training_data()
+     ```
+
+3. **Track Metrics**:
+   - Monitor **RTO** (Recovery Time Objective) and **RPO** (Recovery Point Objective) during the drill.
+
+4. **Document Findings**:
+   - Log issues and solutions to improve the process.
+
+---
+
+## **3. Conduct Failure Simulations**
+
+### **3.1 Use Chaos Monkey**
+**Chaos Monkey** is a tool by Netflix that randomly terminates services to 
+test system resilience.
+
+#### **Setup Chaos Monkey for Kubernetes**
+1. Install Chaos Mesh:
+   ```bash
+   kubectl apply -f https://github.com/chaos-mesh/chaos-mesh/releases/latest/download/chaos-mesh.yaml
+   ```
+
+2. Simulate API Failure:
+   ```yaml
+   apiVersion: chaos-mesh.org/v1alpha1
+   kind: PodChaos
+   metadata:
+     name: api-failure
+   spec:
+     action: pod-kill
+     mode: one
+     selector:
+       namespaces:
+         - default
+       labelSelectors:
+         app: ml-api
+   ```
+   Apply the chaos experiment:
+   ```bash
+   kubectl apply -f api-failure.yaml
+   ```
+
+3. Simulate Database Connection Failure:
+   ```yaml
+   apiVersion: chaos-mesh.org/v1alpha1
+   kind: NetworkChaos
+   metadata:
+     name: db-connection-loss
+   spec:
+     action: delay
+     mode: one
+     selector:
+       labelSelectors:
+         app: postgres
+     delay:
+       latency: "500ms"
+   ```
+   Apply the experiment:
+   ```bash
+   kubectl apply -f db-connection-loss.yaml
+   ```
+
+---
+
+## **4. Backup Schedules and Best Practices**
+
+### **4.1 Backup Schedules**
+- **Daily Incremental Backups**:
+  Backup new or changed files daily.
+  ```bash
+  rsync -av --progress --backup --suffix=.bak ./data/ /backups/data/
+  ```
+
+- **Weekly Full Backups**:
+  Backup the entire dataset and application weekly.
+  ```bash
+  tar -czvf full-backup-$(date +%Y%m%d).tar.gz ./data ./models ./config
+  ```
+
+---
+
+### **4.2 Backup Best Practices**
+1. **Retention**:
+   - Keep daily backups for 7–14 days.
+   - Retain weekly backups for 30–90 days.
+
+2. **Encryption**:
+   Encrypt sensitive backups using **AES-256**.
+   ```bash
+   openssl enc -aes-256-cbc -salt -in backup.sql -out backup.sql.enc
+   ```
+
+3. **Multi-Region Backups**:
+   - Store backups in multiple regions for redundancy.
+
+---
+
+## **5. Infrastructure Best Practices**
+
+1. **Use Infrastructure as Code (IaC)**:
+   - Use Terraform or AWS CloudFormation to replicate infrastructure.
+
+2. **Multi-Region Deployments**:
+   - Deploy critical services across multiple regions to avoid single points of failure.
+
+3. **Monitoring and Alerts**:
+   - Use **Prometheus** or **Datadog** to monitor backup jobs and trigger alerts on failures.
+
+---
+
+## **6. Documentation**
+
+1. **Backup Schedules**:
+   - Maintain a clear schedule for backups and retention policies.
+
+2. **Restore Procedures**:
+   - Document step-by-step instructions for data, model, and code restoration.
+
+3. **Contact Details**:
+   - Include key team members’ contacts for quick escalation.
+
+---
+
+## **7. Resources**
+
+1. **Backup Tools**:
+   - AWS Backup: [AWS Backup Docs](https://aws.amazon.com/backup/).
+   - GCS Backup: [GCS Docs](https://cloud.google.com/storage/docs).
+
+2. **Chaos Engineering**:
+   - Chaos Mesh: [Chaos Mesh Docs](https://chaos-mesh.org/).
+
+3. **Monitoring Tools**:
+   - Prometheus: [Prometheus Docs](https://prometheus.io/).
+   - Grafana: [Grafana Docs](https://grafana.com/).
+
