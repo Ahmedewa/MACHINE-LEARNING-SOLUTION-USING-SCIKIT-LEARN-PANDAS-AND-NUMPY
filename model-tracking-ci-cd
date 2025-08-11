@@ -1,0 +1,121 @@
+      **MODEL; TRACKING WITH CI/CD**
+
+
+## ** Model Tracking with CI/CD**
+
+### **3.1 Why Model Tracking?**
+Model tracking ensures reproducibility by logging:
+1. **Hyperparameters**
+2. **Metrics**
+3. **Artifacts** (e.g., serialized models)
+
+---
+
+### **3.2 Using MLflow for Model Tracking**
+
+#### **Step 1: Install MLflow**
+```bash
+pip install mlflow
+```
+
+---
+
+#### **Step 2: Log Experiments**
+1. code:
+   ```python
+   import mlflow
+   import mlflow.sklearn
+   from sklearn.ensemble import RandomForestClassifier
+   from sklearn.datasets import load_iris
+   from sklearn.model_selection import train_test_split
+
+   # Load Dataset
+   X, y = load_iris(return_X_y=True)
+   X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+   # Start MLflow Experiment
+   mlflow.start_run()
+
+   # Train Model
+   model = RandomForestClassifier(n_estimators=100)
+   model.fit(X_train, y_train)
+
+   # Log Parameters, Metrics, and Model
+   mlflow.log_param("n_estimators", 100)
+   mlflow.log_metric("accuracy", model.score(X_test, y_test))
+   mlflow.sklearn.log_model(model, "model")
+
+   mlflow.end_run()
+   ```
+
+---
+
+### **3.3 Automating Model Tracking with CI/CD**
+
+#### **Step 1: Create a GitHub Actions Workflow**
+1.  `.github/workflows/mlflow.yml`:
+   ```yaml
+   name: MLflow CI/CD
+
+   on:
+     push:
+       branches:
+         - main
+
+   jobs:
+     mlflow:
+       runs-on: ubuntu-latest
+       steps:
+         - name: Checkout Code
+           uses: actions/checkout@v3
+
+         - name: Set Up Python Environment
+           uses: actions/setup-python@v4
+           with:
+             python-version: 3.9
+
+         - name: Install Dependencies
+           run: pip install -r requirements.txt
+
+         - name: Run MLflow Experiment
+           run: python train_model.py
+   ```
+
+---
+
+#### **Step 2: Automate Deployment**
+1. Use `docker build` and `docker push` commands in your workflow to build and deploy the model.
+   ```yaml
+   - name: Build Docker Image
+     run: docker build -t my-ml-model .
+
+   - name: Push Docker Image
+     run: docker push my-ml-model
+   ```
+
+---
+
+### **3.4 Best Practices for CI/CD and Model Tracking**
+1. **Track All Metadata**:
+   - Include dataset versions, preprocessing steps, and code versions.
+2. **Automate Deployment**:
+   - Use tools like **Kubeflow** or **Apache Airflow** for pipeline orchestration.
+3. **Monitor Models in Production**:
+   - Use tools like **Prometheus** and **Grafana** to monitor API latency and prediction drift.
+
+---
+
+## **4. Resources**
+1. **Docker**:
+   - [Docker Best Practices](https://docs.docker.com/develop/dev-best-practices/)
+   - [NVIDIA Docker](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html)
+2. **Great Expectations**:
+   - [Official Docs](https://docs.greatexpectations.io/)
+3. **MLflow**:
+   - [MLflow Tracking](https://mlflow.org/docs/latest/tracking.html)
+
+---
+
+ 
+
+
