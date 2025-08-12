@@ -1,0 +1,97 @@
+           **TESTING-ML-AUTOMATE**
+
+
+
+
+## **Pre-Deployment Error Detection, Remediation, and Audits**
+
+### **Tools for Error Detection**
+1. **Snyk**: For dependency and container vulnerability scanning.
+2. **Supabase**: For backend auditing and monitoring.
+3. **Mobvibe Shield**: For frontend and backend vulnerability detection.
+
+---
+
+### **Split GitHub Deployment into Phases**
+
+#### **Testing Phase**
+```yaml
+name: Testing
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Tests
+        run: pytest
+```
+
+
+### **4.3 Deploying to Streamlit Cloud**
+1. Write the Streamlit app:
+   ```python
+   import streamlit as st
+
+   st.title("ML App")
+   st.write("This is a demo ML app.")
+   ```
+2. Push the code to GitHub.
+3. Link your repository to [Streamlit Cloud](https://streamlit.io/cloud).
+
+---
+
+### **4.4 Deploying to Snowflake**
+1. Use **Snowpark** for deploying Python ML apps.
+2. Package the app into a Snowflake stored procedure.
+
+---
+
+### **4.5 Deploying to AWS, GCP, and Azure**
+1. **AWS**:
+   - Use AWS Elastic Beanstalk, Lambda, or ECS for deploying Dockerized apps.
+2. **GCP**:
+   - Use Google Cloud Run or Kubernetes Engine.
+3. **Azure**:
+   - Use Azure App Service or AKS (Azure Kubernetes Service).
+
+---
+
+## **5. Pre-Deployment Error Detection, Remediation, and Audits**
+
+### **5.1 Tools for Error Detection**
+1. **Snyk**: For dependency and container vulnerability scanning.
+2. **Supabase**: For backend auditing and monitoring.
+3. **Mobvibe Shield**: For frontend and backend vulnerability detection.
+
+---
+
+### **5.2 Split GitHub Deployment into Phases**
+
+#### **Testing Phase**
+```yaml
+name: Testing
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Tests
+        run: pytest
+```
+
