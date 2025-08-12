@@ -1,0 +1,53 @@
+                    SETTING-UP-SNYK-DASHBOARD
+
+
+## **1. Setting Up Snyk Dashboard and Monitoring Your Project**
+
+### **1.1 What is Snyk?**
+Snyk is a security tool that helps developers find, fix, and monitor 
+vulnerabilities in dependencies, containers, and infrastructure as code (IaC).
+It integrates with GitHub, Docker, Kubernetes, and CI/CD pipelines to
+continuously monitor and remediate security issues.
+
+---
+
+### **1.2 Setting Up the Snyk Dashboard**
+
+#### **Step 1: Create a Snyk Account**
+1. Go to [Snyk’s website](https://snyk.io/).
+2. Sign up using GitHub, Google, or your email.
+
+#### **Step 2: Add a Project**
+1. Log in to the Snyk Dashboard.
+2. Click **“Projects”** in the navigation pane.
+3. Select **“Add Project”**.
+4. Connect your GitHub repository or upload a project manually.
+
+#### **Step 3: Configure Monitoring**
+1. Snyk will scan your dependencies for vulnerabilities.
+2. You can configure **alerts** for new vulnerabilities or issues in your project.
+
+---
+
+## **2. Creating Snyk API Token**
+
+### **2.1 Generate a Snyk API Token**
+1. Log in to your Snyk Dashboard.
+2. Go to **Account Settings** (top-right menu).
+3. Under **API Token**, click **“Generate”**.
+4. Copy the token and save it securely (e.g., in an environment variable).
+
+---
+
+### **2.2 Using the Snyk API Token**
+1. Export the token in your local environment:
+   ```bash
+   export SNYK_TOKEN=<your-snyk-token>
+   ```
+2. Use it in your CI/CD pipelines or local scans:
+   ```bash
+   snyk test
+   ```
+
+---
+
