@@ -1,0 +1,40 @@
+                      DEPENDABOT--UPDATES
+
+
+
+## **1. Review Updates Regularly**
+
+Regularly reviewing updates ensures that your ML project stays secure and 
+compatible without introducing breaking changes.
+
+---
+
+### **1.1 Why Review Updates?**
+- **Prevent Breaking Changes**: Updates in core libraries like `TensorFlow`, `PyTorch`, or `scikit-learn` can introduce breaking changes.
+- **Maintain Security**: Vulnerabilities in dependencies can compromise data security.
+- **Ensure Compatibility**: Test updated dependencies with your code to ensure compatibility with your ML models, training pipelines, and scripts.
+
+---
+
+### **1.2 How to Review Updates**
+
+#### **Step 1: Enable Dependabot**
+1. Create or update a `.github/dependabot.yml` file in your repository:
+   ```yaml
+   version: 2
+   updates:
+     - package-ecosystem: "pip" # Dependency manager
+       directory: "/" # Location of dependency files (e.g., requirements.txt)
+       schedule:
+         interval: "weekly" # Frequency of updates (daily, weekly, monthly)
+   ```
+
+2. Commit the file to your repository:
+   ```bash
+   git add .github/dependabot.yml
+   git commit -m "Enable Dependabot for dependencies"
+   git push
+   ```
+
+---
+
