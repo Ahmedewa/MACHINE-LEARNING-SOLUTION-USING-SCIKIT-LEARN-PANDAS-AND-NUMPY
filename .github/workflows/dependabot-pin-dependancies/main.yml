@@ -1,0 +1,64 @@
+                  PIN DEPENDACIES[via DEPEDABOT]
+
+
+## **Pin Dependencies**
+
+Pinning dependencies ensures that your ML project uses specific, tested versions of libraries to avoid unexpected breaking changes.
+
+---
+
+### **2.1 Why Pin Dependencies?**
+- **Stability**: Prevents updates from introducing breaking changes.
+- **Reproducibility**: Ensures consistent results when re-running ML pipelines on different systems.
+- **Dependency Locking**: Helps identify which version works best with your project.
+
+---
+
+### **2.2 How to Pin Dependencies**
+
+1. **Using `requirements.txt`**:
+   - Specify versions explicitly:
+     ```txt
+     numpy==1.24.3
+     pandas==1.5.3
+     scikit-learn==1.2.2
+     tensorflow==2.12.0
+     ```
+
+2. **Automate Dependency Freezing**:
+   - Use `pip freeze` to generate a `requirements.txt` file with pinned versions:
+     ```bash
+     pip freeze > requirements.txt
+     ```
+
+---
+
+### **2.3 Best Practices for Pinning Dependencies**
+1. **Use Dependency Checkers**:
+   - Tools like Dependabot ensure that dependencies are up-to-date.
+2. **Lock Development and Production Dependencies**:
+   - Use separate `requirements-dev.txt` and `requirements-prod.txt` files:
+     ```txt
+     # requirements-dev.txt
+     pytest==7.2.1
+     black==23.3.0
+     numpy==1.24.3
+     ```
+
+---
+
+### **2.4  Pinning and Updating Dependencies**
+1. **Pin Dependencies**:
+   ```bash
+   pip install numpy==1.24.3 pandas==1.5.3
+   ```
+
+2. **Test and Update**:
+   - Test your ML pipeline after applying updates:
+     ```bash
+     pip install --upgrade scikit-learn
+     pytest
+     ```
+
+---
+
