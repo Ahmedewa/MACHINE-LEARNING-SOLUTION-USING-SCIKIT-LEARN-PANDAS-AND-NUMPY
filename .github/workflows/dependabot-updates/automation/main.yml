@@ -1,0 +1,74 @@
+                     **AUTOMATING-DEPENDABOT**
+
+
+
+
+
+
+#### **Step 2: Automate Dependency Testing with CI/CD**
+
+**CI/CD Pipeline for Testing  Pull Requests**
+
+1. Add a GitHub Actions workflow to test updates in a staging environment.
+
+**Workflow** (`.github/workflows/test-dependabot.yml`):
+```yaml
+name: Test Dependabot Updates
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "requirements.txt"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set Up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Unit Tests
+        run: pytest
+```
+
+2. **What This Does**:
+   - Runs tests automatically on pull requests created by Dependabot.
+   - Verifies that dependency updates do not break functionality.
+
+---
+
+#### **Step 3: Review and Merge Dependabot PRs**
+- **In the GitHub UI**:
+  - Check for successful CI/CD test runs.
+  - Review the changes in dependencies (e.g., changelogs, release notes).
+  - Merge the PR after confirming compatibility.
+
+---
+
+### **1.3 Best Practices for Reviewing Updates**
+1. **Use a Staging Branch**:
+   - Merge Dependabot PRs into a staging branch for additional testing before deploying to production.
+   ```bash
+   git checkout -b staging
+   git merge dependabot-branch
+   ```
+
+2. **Read Changelogs**:
+   - Check for breaking changes or deprecations in dependency changelogs.
+
+3. **Test Critical Features**:
+   - Focus on testing critical ML pipeline steps (e.g., model training, evaluation).
+
+---
+
