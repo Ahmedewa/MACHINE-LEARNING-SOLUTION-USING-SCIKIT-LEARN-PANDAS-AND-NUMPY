@@ -1,0 +1,40 @@
+
+
+
+           COMPREHENSIVE DEPLOYMENT GUIDE
+
+
+
+#### **Step: Dockerize Your Application**
+1. Create a `Dockerfile`:
+   ```dockerfile
+   FROM python:3.9-slim
+
+   WORKDIR /app
+
+   COPY requirements.txt .
+   RUN pip install --no-cache-dir -r requirements.txt
+
+   COPY . .
+
+   CMD ["python", "app.py"]
+   ```
+2. Build and Test the Docker Image:
+   ```bash
+   docker build -t ml-app .
+   docker run -p 5000:5000 ml-app
+   ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
