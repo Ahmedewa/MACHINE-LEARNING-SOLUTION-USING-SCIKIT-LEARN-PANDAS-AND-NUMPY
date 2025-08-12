@@ -1,0 +1,91 @@
+            DEPENDABOT YML FILE
+        
+## **1. What is Dependabot?**
+
+### **1.1 Overview**
+Dependabot is a tool provided by GitHub to automatically monitor and manage dependencies in your projects. It creates pull requests to update dependencies when new versions are available, helping to:
+- **Prevent vulnerabilities** from outdated dependencies.
+- **Keep libraries up-to-date** with their latest features and bug fixes.
+- **Automate dependency management**, saving time.
+
+---
+
+### **1.2 Key Features**
+- **Dependency Updates**: Automatically updates dependencies in `package.json`, `requirements.txt`, `Pipfile`, etc.
+- **Security Alerts**: Detects vulnerable dependencies and fixes them.
+- **Multi-Language Support**: Works with JavaScript, Python, Ruby, Java, Go, and more.
+- **Customizable Configuration**: Allows you to set update frequency, ignored versions, and target branches.
+
+---
+
+## **2. How Can I Use Dependabot in ML and Other Projects?**
+
+### **2.1 Setting Up Dependabot**
+Dependabot works by adding a `dependabot.yml` file to your GitHub repository 
+under the `.github` directory.
+
+#### **Step 1: Create `dependabot.yml`**
+1. Add the following file to `.github/dependabot.yml`:
+   ```yaml
+   version: 2
+   updates:
+     - package-ecosystem: "pip" # Specify the dependency manager (e.g., pip, npm, gradle)
+       directory: "/" # Directory containing `requirements.txt` or other dependency files
+       schedule:
+         interval: "daily" # How often Dependabot checks for updates (daily/weekly/monthly)
+       ignore:
+         - dependency-name: "tensorflow"
+           versions: ["==2.12.0"] # Ignore specific versions if needed
+   ```
+
+2. Commit the file to your repository:
+   ```bash
+   git add .github/dependabot.yml
+   git commit -m "Add Dependabot configuration"
+   git push
+   ```
+
+---
+
+### **2.2  ML Projects (Python)**
+
+#### **Dependencies in ML Projects**
+ML projects often rely on packages like `numpy`, `scikit-learn`, `tensorflow`, and `pandas`. Keeping these up-to-date is critical for performance, security, and compatibility.
+
+#### **`dependabot.yml` for Python ML Project**
+```yaml
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "deps"
+      include: scope
+    allow:
+      - dependency-type: "production" # Focus on production dependencies
+    ignore:
+      - dependency-name: "tensorflow"
+        versions: ["<=2.0.0"]
+```
+
+---
+
+### **2.3 Best Practices for Using Dependabot in ML Projects**
+
+1. **Review Updates Regularly**:
+   - Dependabot creates pull requests for updates. Test these updates in a staging environment before merging.
+   - Use automated CI/CD workflows to ensure updates do not break your code.
+
+2. **Pin Dependencies**:
+   - Use pinned versions in `requirements.txt` to avoid unexpected breaking changes:
+     ```txt
+     numpy==1.24.3
+     scikit-learn==1.2.2
+     ```
+
+3. **Test ML Pipelines**:
+   - Run your ML pipeline (training, evaluation) after applying updates to ensure 
+   compatibility.
+
