@@ -1,0 +1,53 @@
+             KUBERNETES DEPLOYMENT
+
+#### **Step : Deploy to Kubernetes**
+1. Create Kubernetes deployment and service files:
+   ```yaml
+   # deployment.yaml
+   apiVersion: apps/v1
+   kind: Deployment
+   metadata:
+     name: ml-app
+   spec:
+     replicas: 2
+     selector:
+       matchLabels:
+         app: ml-app
+     template:
+       metadata:
+         labels:
+           app: ml-app
+       spec:
+         containers:
+         - name: ml-app
+           image: ml-app:latest
+           ports:
+           - containerPort: 5000
+   ```
+
+   ```yaml
+   # service.yaml
+   apiVersion: v1
+   kind: Service
+   metadata:
+     name: ml-app-service
+   spec:
+     selector:
+       app: ml-app
+     ports:
+       - protocol: TCP
+         port: 80
+         targetPort: 5000
+     type: LoadBalancer
+   ```
+2. Apply the configurations:
+   ```bash
+   kubectl apply -f deployment.yaml
+   kubectl apply -f service.yaml
+   ```
+
+#### **Step 4: Set Up Kubernetes Orchestration**
+Use tools like **Kubeflow** or **Helm** to manage Kubernetes pipelines and deployments.
+
+---
+
