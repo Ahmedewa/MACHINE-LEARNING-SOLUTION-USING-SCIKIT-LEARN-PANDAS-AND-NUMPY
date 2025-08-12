@@ -1,0 +1,27 @@
+           **MACHINE-LEARNING-ERROR-DETECTION-HANDLING**
+
+
+#### **Error Detection & handling Phase**
+```yaml
+name: Error Detection
+
+on: [push]
+
+jobs:
+  snyk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Snyk
+        run: npm install -g snyk
+
+      - name: Authenticate Snyk
+        run: snyk auth ${{ secrets.SNYK_TOKEN }}
+
+      - name: Run Snyk Test
+        run: snyk test
+```
+
+mlit.io/cloud)
+4. **Kubernetes**: [Kubernetes Documentation](https://kubernetes.io/docs/)
+5. **AWS Deployment**: [AWS Elastic Beanstalk](https://aws.amazon.com/elasticbeanstalk/)
+
