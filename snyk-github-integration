@@ -1,0 +1,40 @@
+                INTEGRATING-SNYK-INTO -GITHUB-REPOSITORY
+
+## ** Integrating Snyk into Our GitHub Repository**
+
+### **Integrate Snyk with GitHub**
+1. In the Snyk Dashboard, go to **Integrations**.
+2. Select **GitHub** and authorize Snyk to access your repositories.
+3. Choose the repository you want to monitor.
+4. Snyk will automatically scan the repository for vulnerabilities after every ?
+code push.
+
+---
+
+### **3.2 Add Snyk to CI/CD Pipeline**
+#### **GitHub Actions **
+```yaml
+name: Snyk Security Scan
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  snyk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Install Snyk
+        run: npm install -g snyk
+
+      - name: Authenticate Snyk
+        run: snyk auth ${{ secrets.SNYK_TOKEN }}
+
+      - name: Run Snyk Test
+        run: snyk test
+```
+
