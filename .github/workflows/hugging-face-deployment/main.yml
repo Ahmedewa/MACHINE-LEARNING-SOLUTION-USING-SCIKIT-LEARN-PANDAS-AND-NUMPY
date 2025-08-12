@@ -1,0 +1,18 @@
+               HUGGING FACE-DEPLOYMENT
+
+
+### ** Deploying to Hugging Face via Gradio**
+1. Create a Gradio interface:
+   ```python
+   import gradio as gr
+
+   def predict(text):
+       return f"Prediction for: {text}"
+
+   interface = gr.Interface(fn=predict, inputs="text", outputs="text")
+   interface.launch()
+   ```
+2. Deploy using Hugging Face Spaces:
+   - Push the code to a Hugging Face Space repository configured for Gradio.
+
+---
